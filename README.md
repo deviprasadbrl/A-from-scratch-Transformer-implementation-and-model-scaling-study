@@ -223,32 +223,32 @@ The examples below compare the reference translation with each model's generated
 **English source:** `A black box in your car?`
 
 - **Reference:** आपकी कार में ब्लैक बॉक्स?
-- **68.73M model:** कार में ब्लैक बक्सा?
-- **23.36M model:** काले बॉक्स में एक काला बॉक्स?
+- **68.73M model: ** कार में ब्लैक बक्सा?
+- **23.36M model: ** काले बॉक्स में एक काला बॉक्स?
 
 ### Example 2 — Idiom and implied reaction
 
 **English source:** `The tea party is aghast.`
 
 - **Reference:** चाय पार्टी भौचक्की है।
-- **68.73M model:** चाय पार्टी है।
-- **23.36M model:** चाय पार्टी एक चाय है।
+- **68.73M model: ** चाय पार्टी है।
+- **23.36M model: ** चाय पार्टी एक चाय है।
 - 
 ### Example 3 — Longer sentence and meaning preservation
 
 **English source:** `This really is a must for our nation.`
 
 - **Reference:** यह हमारे देश के लिए वास्तव में अनिवार्य वस्तु है।
-- **68.73M model:** यह वास्तव में हमारे देश के लिए एक राष्ट्र होना चाहिए।
-- **23.36M model:** यह वास्तव में हमारे राष्ट्र के लिए आवश्यक है।
+- **68.73M model: ** यह वास्तव में हमारे देश के लिए एक राष्ट्र होना चाहिए।
+- **23.36M model: ** यह वास्तव में हमारे राष्ट्र के लिए आवश्यक है।
 
 ### Example 4 — Long sentence with complex syntax
 
 **English source:** `There is going to be a change in how we pay these taxes.`
 
 - **Reference:** हमारे द्वारा कर भुगतान किए जाने के तरीके में परिवर्तन होने जा रहा है।
-- **68.73M model:** इन करों में कैसे बदलाव करने के लिए जा रहा है।
-- **23.36M model:** हम इन करों में एक परिवर्तन होने जा रहे हैं।
+- **68.73M model: ** इन करों में कैसे बदलाव करने के लिए जा रहा है।
+- **23.36M model: ** हम इन करों में एक परिवर्तन होने जा रहे हैं।
 
 ### What these examples suggest
 
