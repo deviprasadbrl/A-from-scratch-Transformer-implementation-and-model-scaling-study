@@ -9,7 +9,7 @@ from config import CONFIG_23M
 from paths import LATEST_CHECKPOINT_PATH
 import time
 
-config=CONFIG_23M()  #choose this based on the model
+config=CONFIG_23M  #choose this based on the model
 
 RESUME=False
 checkpoint_path=LATEST_CHECKPOINT_PATH
