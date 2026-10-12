@@ -8,12 +8,12 @@ from dataset_processing.data_pipeline import creating_mask
 from dataset_processing.shared_tokenizer import tokenizer,BOS_ID,EOS_ID,PAD_ID
 
 from dataset_processing.Dataloaders import test_loader
-from config import Config23
+from config import Config_23
 from sacrebleu.metrics import BLEU
 from paths import BEST_CHECKPOINT_PATH
 
 
-config=Config23()
+config=Config_23()
 
 BEAM_SIZE=4
 LENGTH_PENALTY=0.7
