@@ -18,7 +18,77 @@ An educational neural machine translation project built in PyTorch to study the 
 | Hardware | NVIDIA Tesla T4 GPU (~15 GiB VRAM) |
 | Model family | Encoder–decoder Transformer, trained from scratch |
 
-## 2. Dataset and preprocessing
+## 2.Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/deviprasadbrl/english-hindi-transformer-from-scratch.git
+cd english-hindi-transformer-from-scratch
+```
+
+### 2. Install Dependencies
+
+Install the required Python packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+For GPU training, install a PyTorch build compatible with your CUDA environment using the [official PyTorch installation guide](https://pytorch.org/get-started/locally/).
+
+### 3. Download and Prepare the Dataset
+
+This project uses the [IIT Bombay English–Hindi Parallel Corpus](https://huggingface.co/datasets/cfilt/iitb-english-hindi).
+
+The dataset is not included in this repository. Download it using Hugging Face Datasets or follow the instructions in the project's data pipeline. The dataset must be prepared in the format expected by the training scripts.
+
+### 4. Configure Dataset and Checkpoint Paths
+
+This project was developed and trained in Kaggle Notebooks. Some paths may therefore refer to Kaggle-specific directories, such as `/kaggle/input/` and `/kaggle/working/`.
+
+Before running training or inference, ensure that the dataset, tokenizer, and checkpoint paths match your environment. The default paths are defined in `paths.py`.
+
+### 5. Select a Model Configuration
+
+Two Transformer configurations are provided:
+
+| Configuration | Parameters | Model Dimension | Feed-Forward Dimension | Batch Size |
+|---|---:|---:|---:|---:|
+| `CONFIG_23M` | 23.36M | 256 | 1,024 | 128 |
+| `CONFIG_68M` | 68.73M | 512 | 2,048 | 64 |
+
+To select the smaller model, use the following configuration in your training script:
+
+```python
+from config import CONFIG_23M
+
+config = CONFIG_23M
+```
+
+To select the larger model instead:
+
+```python
+from config import CONFIG_68M
+
+config = CONFIG_68M
+```
+
+Ensure that the selected configuration is passed to the model and training components. These configurations define the model and training settings; they do not include trained model weights.
+
+### 6. Train the Model
+
+After preparing the dataset and verifying the paths, run:
+
+```bash
+python training.py
+```
+
+Make sure `training.py` uses the intended configuration and that all required data files are available before starting training.
+
+> **Note:** Both models were trained from scratch. Training requires substantial compute resources and may take many hours. The experimental results reported in this README correspond to the completed training runs, not necessarily a new run using the instructions above.
+
+## 3. Dataset and preprocessing
 
 The project uses the IIT Bombay English–Hindi parallel corpus, which contains aligned English and Hindi sentences collected from multiple sources. The tokenizer is shared between the two languages and uses byte-level BPE, allowing text to be represented as subword tokens rather than requiring a separate word-level vocabulary for each language.
 
@@ -70,7 +140,7 @@ A maximum length of 160 was a practical trade-off between coverage and compute c
 
 The final test loader retained **2,394 of 2,507** test pairs after filtering. The validation length report contains 520 examples before filtering. Dataset counts can differ between raw data, cleaned data, and the final loader; therefore, the exact retained training count should be taken from the final preprocessing run rather than inferred from the raw corpus count.
 
-## 3. Model architecture
+## 4. Model architecture
 
 Both experiments use the original encoder–decoder Transformer design introduced in *Attention Is All You Need*.
 
@@ -84,7 +154,7 @@ Both experiments use the original encoder–decoder Transformer design introduce
 
 The core attention and Transformer components were implemented with standard PyTorch tensor operations. This was an implementation-focused project rather than a wrapper around a pretrained translation model.
 
-## 4. Why FlashAttention was not used
+## 5. Why FlashAttention was not used
 
 FlashAttention is an optimized exact-attention implementation designed to reduce high-bandwidth-memory traffic and improve attention efficiency. It is not a different attention objective; it computes the same attention result using a more memory-efficient implementation.
 
@@ -92,7 +162,7 @@ For this project, attention was implemented explicitly with standard PyTorch ope
 
 The trade-off is that the explicit implementation can use more intermediate memory and can be slower than a compatible fused attention kernel. Using FlashAttention could be a useful future optimization, but it was not required to validate the model's architecture or training pipeline.
 
-## 5. Training setup
+## 6. Training setup
 
 The models were trained from random initialization using teacher forcing. During training, the decoder receives the target sequence shifted right (`tgt[:, :-1]`) and predicts the next tokens (`tgt[:, 1:]`). Cross-entropy loss ignores padding tokens.
 
@@ -110,7 +180,7 @@ The models were trained from random initialization using teacher forcing. During
 | Inference | Autoregressive decoding with beam search |
 | Beam size / length penalty | `4` / `0.7` |
 
-## 6. Experiments and results
+## 7. Experiments and results
 
 | Metric | 23.36M-parameter Transformer | 68.73M-parameter Transformer |
 |---|---:|---:|
@@ -135,7 +205,7 @@ The larger model achieved a best validation loss lower by **0.0600** and corpus 
 </p>
 
 
-## 7. Translation examples and qualitative analysis
+## 8. Translation examples and qualitative analysis
 
 The examples below compare the reference translation with each model's generated output. They illustrate that the models learned some English–Hindi correspondences, but still struggle with context, word order, meaning preservation, and fluent Hindi. The reference is from the dataset and should not be treated as the only possible valid translation in every case.
 
@@ -183,7 +253,7 @@ The examples below compare the reference translation with each model's generated
 
 The larger model performs better on corpus BLEU and validation loss overall, but the qualitative examples show that both models can omit important information, misinterpret expressions, or produce ungrammatical Hindi. The outputs are useful diagnostic evidence, not proof of production-level translation quality.
 
-## 8. Limitations
+## 9. Limitations
 
 1. **Low translation quality:** corpus BLEU values of 6.78 and 7.74 indicate that these models remain far from reliable general-purpose translators.
 2. **Limited compute budget:** training was conducted on a single Tesla T4-class GPU, constraining batch size, training duration, and the scale of experiments.
@@ -194,7 +264,7 @@ The larger model performs better on corpus BLEU and validation loss overall, but
 7. **Domain and data limitations:** the corpus combines data from varied sources, and the model may not generalize well to domains or sentence styles that are underrepresented in training.
 8. **No pretrained knowledge:** both models were trained from random initialization; they do not benefit from a pretrained language model or a pretrained translation system.
 
-## 9. Lessons learned
+## 10. Lessons learned
 
 - A functioning Transformer requires more than the attention equations: correct target shifting, padding masks, causal masks, cross-attention masks, and decoding behavior are all important.
 - Validation loss and BLEU provide different views of performance; neither replaces qualitative inspection.
@@ -203,12 +273,12 @@ The larger model performs better on corpus BLEU and validation loss overall, but
 - Optimized kernels can improve efficiency, but a transparent baseline is valuable when the goal is to understand and validate the implementation.
 - Reproducible reporting requires distinguishing raw dataset sizes from filtered loader sizes and clearly stating when experiments differ in more than one variable.
 
-## 10. References
+## 11. References
 
 1. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). **Attention Is All You Need.** *Advances in Neural Information Processing Systems 30 (NeurIPS 2017).* [arXiv:1706.03762](https://arxiv.org/abs/1706.03762).
 2. Dataset repository: [cfilt/iitb-english-hindi on Hugging Face](https://huggingface.co/datasets/cfilt/iitb-english-hindi).
 
-## 11. Reproducibility note
+## 12. Reproducibility note
 
 This README reports the configurations and metrics recorded during the experiments. Before treating the project as a fully reproducible release, include the training and inference scripts, tokenizer files/configuration, dependency versions, and exact preprocessing commands in the repository. Verify the final retained training-set count from the actual data pipeline before publishing it; intermediate notes contained different counts from different processing stages.
 
