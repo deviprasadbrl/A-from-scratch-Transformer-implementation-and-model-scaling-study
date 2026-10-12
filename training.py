@@ -73,7 +73,7 @@ else:
 
 patience=2
 
-gradient_accumulation_steps=config.gradient_acculumation
+gradient_accumulation_steps=config.gradient_accumulation
 
 
 for epoch in range(start_epoch,config.total_epochs):
