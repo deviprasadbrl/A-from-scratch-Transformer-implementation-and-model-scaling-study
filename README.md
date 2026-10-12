@@ -102,17 +102,12 @@ The larger model achieved a best validation loss lower by **0.0600** and corpus 
 **Paste the hosted image URL or repository-relative path for the combined graph in the Markdown image line below.** If the graphs are stored in an `images/` folder in the GitHub repository, use the corresponding relative path.
 
 ```markdown
-![Training and validation loss comparison](PASTE_COMBINED_GRAPH_LINK_OR_PATH_HERE)
+![Training and validation loss comparison]
 ```
+<p align="center">
+  <img src="assets/transformer_loss_comparison.png.png" width="500">
+</p>
 
-Optional separate graphs can be added in the same way:
-
-```markdown
-![23.36M Transformer loss curves](PASTE_23M_GRAPH_LINK_OR_PATH_HERE)
-![68.73M Transformer loss curves](PASTE_68M_GRAPH_LINK_OR_PATH_HERE)
-```
-
-Use the recorded loss curves from these two Transformer runs only. Do not substitute generic neural-network images or plots from unrelated architectures.
 
 ## 7. Translation examples and qualitative analysis
 
@@ -185,9 +180,18 @@ The larger model performs better on corpus BLEU and validation loss overall, but
 ## 10. References
 
 1. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). **Attention Is All You Need.** *Advances in Neural Information Processing Systems 30 (NeurIPS 2017).* [arXiv:1706.03762](https://arxiv.org/abs/1706.03762).
-2. Kunchukuttan, A., Mehta, P., & Bhattacharyya, P. (2018). **The IIT Bombay English-Hindi Parallel Corpus.** *Proceedings of the Eleventh International Conference on Language Resources and Evaluation (LREC 2018).* [ACL Anthology](https://aclanthology.org/L18-1548/).
-3. Dataset repository: [cfilt/iitb-english-hindi on Hugging Face](https://huggingface.co/datasets/cfilt/iitb-english-hindi).
+2. Dataset repository: [cfilt/iitb-english-hindi on Hugging Face](https://huggingface.co/datasets/cfilt/iitb-english-hindi).
 
 ## 11. Reproducibility note
 
 This README reports the configurations and metrics recorded during the experiments. Before treating the project as a fully reproducible release, include the training and inference scripts, tokenizer files/configuration, dependency versions, and exact preprocessing commands in the repository. Verify the final retained training-set count from the actual data pipeline before publishing it; intermediate notes contained different counts from different processing stages.
+
+---
+
+# Author
+
+**Devi Prasad BRL**
+
+[GitHub](https://github.com/deviprasadbrl)
+
+---
