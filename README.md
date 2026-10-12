@@ -22,6 +22,37 @@ An educational neural machine translation project built in PyTorch to study the 
 
 The project uses the IIT Bombay English–Hindi parallel corpus, which contains aligned English and Hindi sentences collected from multiple sources. The tokenizer is shared between the two languages and uses byte-level BPE, allowing text to be represented as subword tokens rather than requiring a separate word-level vocabulary for each language.
 
+## Downloading the dataset
+
+Install the dataset library:
+
+```bash
+pip install datasets
+```
+
+Then run:
+
+```python
+from datasets import load_dataset
+
+dataset=load_dataset("cfilt/iitb-english-hindi")
+
+print(dataset)
+print(dataset["train"][0]["translation"])
+```
+
+The dataset contains `train`,`validation`,and `test` splits. Each example contains a `translation` field with `en` and `hi` text. The expected access pattern is:
+
+```python
+example = dataset["train"][0]["translation"]
+english_text=example["en"]
+hindi_text=example["hi"]
+```
+
+Use the dataset's official page for details and any dataset-specific terms: [IIT Bombay English–Hindi on Hugging Face](https://huggingface.co/datasets/cfilt/iitb-english-hindi).
+
+**Project integration note:** The code above downloads the raw Hugging Face dataset. Your project's preprocessing/data-pipeline code may perform additional cleaning, filtering, or conversion before training. Follow the repository's data-pipeline configuration for the exact paths and preprocessing steps; do not assume the raw dataset is already in the project's processed format.
+
 The token-length statistics below were recorded before the final length filtering. Lengths refer to tokenizer tokens, not words.
 
 | Split | Language | Pairs/sentences | Mean | Median | P95 | P99 | Maximum |
