@@ -121,7 +121,7 @@ hindi_text=example["hi"]
 
 Use the dataset's official page for details and any dataset-specific terms: [IIT Bombay English–Hindi on Hugging Face](https://huggingface.co/datasets/cfilt/iitb-english-hindi).
 
-**Project integration note:** The code above downloads the raw Hugging Face dataset. Your project's preprocessing/data-pipeline code may perform additional cleaning, filtering, or conversion before training. Follow the repository's data-pipeline configuration for the exact paths and preprocessing steps; do not assume the raw dataset is already in the project's processed format.
+**Project integration note:** The code above downloads the raw Hugging Face dataset.The project's preprocessing/data-pipeline code may perform additional cleaning, filtering, or conversion before training. Follow the repository's data-pipeline configuration for the exact paths and preprocessing steps; do not assume the raw dataset is already in the project's processed format.
 
 The token-length statistics below were recorded before the final length filtering. Lengths refer to tokenizer tokens, not words.
 
