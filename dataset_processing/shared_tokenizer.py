@@ -1,7 +1,8 @@
 from tokenizers import Tokenizer
 from tokenizers.decoders import ByteLevel as ByteLevelDecoder
+from paths import TOKENIZER_PATH
 
-tokenizer=Tokenizer.from_file("shared_tokenizer.json")
+tokenizer=Tokenizer.from_file(TOKENIZER_PATH)
 tokenizer.decoder=ByteLevelDecoder()
 
 PAD_ID=tokenizer.token_to_id("<PAD>")
