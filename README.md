@@ -99,13 +99,8 @@ The larger model achieved a best validation loss lower by **0.0600** and corpus 
 
 ### Training and validation loss graphs
 
-**Paste the hosted image URL or repository-relative path for the combined graph in the Markdown image line below.** If the graphs are stored in an `images/` folder in the GitHub repository, use the corresponding relative path.
-
-```markdown
-![Training and validation loss comparison]
-```
 <p align="center">
-  <img src="assets/transformer_loss_comparison.png.png" width="500">
+  <img src="assets/transformer_loss_comparison.png" width="500">
 </p>
 
 
