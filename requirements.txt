@@ -1,0 +1,11 @@
+# Core dependencies for the English–Hindi Transformer project
+# These are baseline package names; pin versions after verifying your
+# actual Kaggle environment for fully reproducible runs.
+
+torch
+datasets
+tokenizers
+numpy
+tqdm
+matplotlib
+sacrebleu
