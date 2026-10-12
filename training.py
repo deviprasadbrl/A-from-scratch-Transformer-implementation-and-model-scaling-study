@@ -6,7 +6,7 @@ from util.decoder import Decoder
 from dataset_processing.data_pipeline import creating_mask,PAD_ID
 from dataset_processing.Dataloaders import train_loader,val_loader,test_loader
 from config import CONFIG_23M
-from paths import LATEST_CHECKPOINT_PATH
+from paths import BEST_CHECKPOINT_PATH, LATEST_CHECKPOINT_PATH
 import time
 
 config=CONFIG_23M  #choose this based on the model
@@ -204,7 +204,7 @@ for epoch in range(start_epoch,config.total_epochs):
                     "best_val_loss": best_val
                 }
 
-        torch.save(checkpoint,"best_translation_model.pt")
+        torch.save(checkpoint,BEST_CHECKPOINT_PATH)
                 
 
         print(f"Best model saved at epoch: {epoch}")
@@ -227,7 +227,7 @@ for epoch in range(start_epoch,config.total_epochs):
                         "scheduler_state_dict": scheduler.state_dict(),
                         "patience_counter":patience_counter
                         }
-    torch.save(latest_checkpoint,"latest_translation_model.pt")
+    torch.save(latest_checkpoint,LATEST_CHECKPOINT_PATH)
     print(f"Latest model saved at epoch: {epoch}")
 
     epoch_time=time.time()-epoch_start
