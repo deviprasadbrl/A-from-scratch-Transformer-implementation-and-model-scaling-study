@@ -8,12 +8,12 @@ from dataset_processing.data_pipeline import creating_mask
 from dataset_processing.shared_tokenizer import tokenizer,BOS_ID,EOS_ID,PAD_ID
 
 from dataset_processing.Dataloaders import test_loader
-from config import Config_23
+from config import CONFIG_23M
 from sacrebleu.metrics import BLEU
 from paths import BEST_CHECKPOINT_PATH
 
 
-config=Config_23()
+config=CONFIG_23M()
 
 BEAM_SIZE=4
 LENGTH_PENALTY=0.7
@@ -150,6 +150,7 @@ def beam_search(
         gather_indices=(batch_offset + next_beam).reshape(-1)
 
         sequences=sequences[gather_indices]
+
         encoder_out=encoder_out[gather_indices]
         encoder_mask=encoder_mask[gather_indices]
         finished=finished[gather_indices]
@@ -176,7 +177,7 @@ def beam_search(
 
     best_indices=torch.argmax(normalized_scores,dim=1)
 
-    sequences=sequences.reshape(batch_size,beam_size-1)
+    sequences=sequences.reshape(batch_size,beam_size,-1)
 
     batch_indices=torch.arange(batch_size,device=device)
 
