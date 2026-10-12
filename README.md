@@ -1,89 +1,193 @@
-# English–Hindi Transformer from Scratch
+# English–Hindi Neural Machine Translation with a Transformer
 
-An educational English-to-Hindi neural machine translation project implemented in PyTorch. The encoder–decoder Transformer, data pipeline, training loop, decoding, and evaluation were built for learning and experimentation.
+An educational neural machine translation project built in PyTorch to study the Transformer architecture end to end. Two encoder–decoder models were trained from random initialization on the IIT Bombay English–Hindi parallel corpus. The project focuses on implementing the core architecture, building a translation data pipeline, training under limited GPU resources, and evaluating autoregressive generation.
 
-## Project overview
+> **Project status:** Experimental learning project. The models demonstrate a working training and inference pipeline, but their translation quality is not sufficient for real-world use.
 
-- **Task:** English → Hindi translation
-- **Dataset:** IIT Bombay English–Hindi parallel corpus
-- **Tokenizer:** Shared Byte-Level BPE, vocabulary size 16,000
-- **Hardware:** NVIDIA Tesla T4
-- **Approach:** Train from random initialization; teacher forcing; AdamW; mixed precision; gradient accumulation; gradient clipping; checkpointing
+## 1. Project at a glance
 
-## Dataset and sequence length
+| Item | Details |
+|---|---|
+| Task | English → Hindi neural machine translation |
+| Dataset | [IIT Bombay English–Hindi Parallel Corpus](https://huggingface.co/datasets/cfilt/iitb-english-hindi) |
+| Framework | PyTorch |
+| Tokenizer | Shared Byte-Level BPE tokenizer |
+| Vocabulary | 16,000 tokens |
+| Special tokens | `<PAD>=0`, `<BOS>=1`, `<EOS>=2`, `<UNK>=3` |
+| Maximum sequence length | 160 tokens, including special tokens |
+| Hardware | NVIDIA Tesla T4 GPU (~15 GiB VRAM) |
+| Model family | Encoder–decoder Transformer, trained from scratch |
 
-The token-length report lists 1,659,083 raw training pairs, 520 validation pairs, and 2,507 test pairs before filtering. Lengths below are tokenizer tokens, not words.
+## 2. Dataset and preprocessing
 
-| Split | Language | Sentences | Mean | Median | P95 | P99 | Max |
+The project uses the IIT Bombay English–Hindi parallel corpus, which contains aligned English and Hindi sentences collected from multiple sources. The tokenizer is shared between the two languages and uses byte-level BPE, allowing text to be represented as subword tokens rather than requiring a separate word-level vocabulary for each language.
+
+The token-length statistics below were recorded before the final length filtering. Lengths refer to tokenizer tokens, not words.
+
+| Split | Language | Pairs/sentences | Mean | Median | P95 | P99 | Maximum |
 |---|---|---:|---:|---:|---:|---:|---:|
-| Train | English | 1,659,083 | 19.74 | 14 | 54.00 | 92.00 | 3,228 |
-| Train | Hindi | 1,659,083 | 49.65 | 33 | 147.00 | 246.00 | 5,337 |
-| Validation | English | 520 | 26.44 | 24 | 50.00 | 67.81 | 105 |
-| Validation | Hindi | 520 | 61.91 | 57 | 118.00 | 160.86 | 219 |
-| Test | English | 2,507 | 30.31 | 28 | 58.00 | 73.94 | 133 |
-| Test | Hindi | 2,507 | 79.22 | 71 | 158.00 | 206.88 | 293 |
+| Train | English | 1,659,083 | 19.74 | 14 | 54 | 92 | 3,228 |
+| Train | Hindi | 1,659,083 | 49.65 | 33 | 147 | 246 | 5,337 |
+| Validation | English | 520 | 26.44 | 24 | 50 | 67.81 | 105 |
+| Validation | Hindi | 520 | 61.91 | 57 | 118 | 160.86 | 219 |
+| Test | English | 2,507 | 30.31 | 28 | 58 | 73.94 | 133 |
+| Test | Hindi | 2,507 | 79.22 | 71 | 158 | 206.88 | 293 |
 
-`max_length = 160` was chosen as a compute/coverage trade-off. It exceeds the training P95 for Hindi (147) but is below Hindi P99 (246). BOS/EOS tokens count toward the limit. The test loader retained 2,394 of 2,507 raw test pairs.
+### Why limit sequences to 160 tokens?
 
-## Architecture
+A maximum length of 160 was a practical trade-off between coverage and compute cost. It is above the training Hindi 95th-percentile length (147 tokens), while remaining below the 99th percentile (246 tokens). This retains many ordinary examples while limiting the memory and attention computation required by long sequences. The trade-off is that some long examples are truncated or excluded, depending on the preprocessing pipeline. BOS and EOS tokens count toward the maximum length.
 
-Both models use six encoder blocks, six decoder blocks, and eight attention heads. The encoder builds contextual source representations; the decoder uses masked self-attention and cross-attention to generate Hindi tokens autoregressively. Padding masks block PAD positions and causal masking blocks future target tokens.
+The final test loader retained **2,394 of 2,507** test pairs after filtering. The validation length report contains 520 examples before filtering. Dataset counts can differ between raw data, cleaned data, and the final loader; therefore, the exact retained training count should be taken from the final preprocessing run rather than inferred from the raw corpus count.
 
-The shared tokenizer uses `<PAD>=0`, `<BOS>=1`, `<EOS>=2`, and `<UNK>=3`. Attention and Transformer components were implemented using standard PyTorch operations. FlashAttention was not used due to the chosen environment's compatibility constraints and the goal of explicitly implementing attention; support depends on software version, kernel, dtype, and GPU architecture.
+## 3. Model architecture
 
-## Training and model configurations
+Both experiments use the original encoder–decoder Transformer design introduced in *Attention Is All You Need*.
 
-Training uses shifted targets (`decoder_input = tgt[:, :-1]`, `labels = tgt[:, 1:]`), cross-entropy with PAD ignored, AdamW (`lr=3e-4`, weight decay `0.01`), mixed precision, gradient accumulation, gradient clipping (`1.0`), cosine scheduling, validation monitoring, and checkpoints.
+- **Encoder:** six layers of self-attention and feed-forward processing build contextual representations of the English source sentence.
+- **Decoder:** six layers use causal self-attention over previously generated Hindi tokens, then cross-attention over the encoder output.
+- **Multi-head attention:** allows attention to be computed across multiple learned representation subspaces.
+- **Position information:** positional encoding supplies token-order information because the model does not use recurrence.
+- **Feed-forward networks:** process each position's representation between attention sublayers.
+- **Residual connections, layer normalization, and dropout:** support optimization and regularization.
+- **Masks:** source/target padding masks prevent attention to padding positions; causal masking prevents the decoder from seeing future target tokens during training.
 
-| Metric | 23.36M Transformer | 68.73M Transformer |
+The core attention and Transformer components were implemented with standard PyTorch tensor operations. This was an implementation-focused project rather than a wrapper around a pretrained translation model.
+
+## 4. Why FlashAttention was not used
+
+FlashAttention is an optimized exact-attention implementation designed to reduce high-bandwidth-memory traffic and improve attention efficiency. It is not a different attention objective; it computes the same attention result using a more memory-efficient implementation.
+
+For this project, attention was implemented explicitly with standard PyTorch operations for transparency and to make the tensor shapes, masks, and attention calculations easier to inspect while learning. The available T4/software environment also constrained which optimized kernels could be used conveniently. FlashAttention support depends on the specific package version, CUDA/PyTorch build, data type, and GPU architecture, so it would be inaccurate to claim that every FlashAttention version is categorically impossible on a T4.
+
+The trade-off is that the explicit implementation can use more intermediate memory and can be slower than a compatible fused attention kernel. Using FlashAttention could be a useful future optimization, but it was not required to validate the model's architecture or training pipeline.
+
+## 5. Training setup
+
+The models were trained from random initialization using teacher forcing. During training, the decoder receives the target sequence shifted right (`tgt[:, :-1]`) and predicts the next tokens (`tgt[:, 1:]`). Cross-entropy loss ignores padding tokens.
+
+| Setting | Value |
+|---|---|
+| Optimizer | AdamW |
+| Learning rate | `3e-4` |
+| Weight decay | `0.01` |
+| Dropout | `0.1` |
+| Gradient clipping | `1.0` |
+| Learning-rate schedule | Cosine schedule |
+| Precision | CUDA FP16 mixed precision |
+| Gradient accumulation | 2 steps |
+| Training objective | Next-token cross-entropy, ignoring PAD |
+| Inference | Autoregressive decoding with beam search |
+| Beam size / length penalty | `4` / `0.7` |
+
+## 6. Experiments and results
+
+| Metric | 23.36M-parameter Transformer | 68.73M-parameter Transformer |
 |---|---:|---:|
+| Model parameters | 23,364,224 | 68,732,544 |
 | `d_model` | 256 | 512 |
-| FFN dimension | 1,024 | 2,048 |
-| Encoder / decoder blocks | 6 / 6 | 6 / 6 |
+| Feed-forward dimension | 1,024 | 2,048 |
+| Encoder / decoder layers | 6 / 6 | 6 / 6 |
+| Attention heads | 8 | 8 |
 | Batch size | 128 | 64 |
-| Epochs completed | 30 | 15 |
+| Completed epochs | 30 | 15 |
 | Best validation loss | 1.4464 (epoch 27) | 1.3864 (epoch 12) |
-| Approx. training time | 27 hours | 25.6 hours |
-| Filtered test examples | 2,394 | 2,394 |
-| Beam size / length penalty | 4 / 0.7 | 4 / 0.7 |
-| Reported corpus BLEU | 6.78 | 7.74 |
+| Approximate training time | 27 hours | 25.6 hours |
+| Test examples evaluated | 2,394 | 2,394 |
+| Corpus BLEU | 6.78 | 7.74 |
 
-## Loss curves
+The larger model achieved a best validation loss lower by **0.0600** and corpus BLEU higher by **0.96 points**. This comparison is informative but not a perfectly controlled parameter-only experiment: the batch sizes and number of completed epochs differed, and the models had different training trajectories. The BLEU scores are reported on the same filtered test set using beam size 4 and length penalty 0.7; BLEU is a corpus-level metric and should not be interpreted as a percentage of translations that are correct.
 
-All graphs below use the **actual recorded training and validation losses from these two Transformer runs only**.
+### Training and validation loss graphs
 
-### Combined comparison
+**Paste the hosted image URL or repository-relative path for the combined graph in the Markdown image line below.** If the graphs are stored in an `images/` folder in the GitHub repository, use the corresponding relative path.
 
-![Combined Transformer loss curves](transformer_loss_comparison.png)
+```markdown
+![Training and validation loss comparison](PASTE_COMBINED_GRAPH_LINK_OR_PATH_HERE)
+```
 
-[Download combined graph](transformer_loss_comparison.png)
+Optional separate graphs can be added in the same way:
 
-### 23.36M-parameter Transformer
+```markdown
+![23.36M Transformer loss curves](PASTE_23M_GRAPH_LINK_OR_PATH_HERE)
+![68.73M Transformer loss curves](PASTE_68M_GRAPH_LINK_OR_PATH_HERE)
+```
 
-![23.36M Transformer loss curves](loss_23_36M.png)
+Use the recorded loss curves from these two Transformer runs only. Do not substitute generic neural-network images or plots from unrelated architectures.
 
-[Download 23.36M graph](loss_23_36M.png)
+## 7. Translation examples and qualitative analysis
 
-### 68.73M-parameter Transformer
+The examples below compare the reference translation with each model's generated output. They illustrate that the models learned some English–Hindi correspondences, but still struggle with context, word order, meaning preservation, and fluent Hindi. The reference is from the dataset and should not be treated as the only possible valid translation in every case.
 
-![68.73M Transformer loss curves](loss_68_73M.png)
+### Example 1 — Short phrase with a concrete noun
 
-[Download 68.73M graph](loss_68_73M.png)
+**English source:** `A black box in your car?`
 
-## Sample outputs
+- **Reference:** आपकी कार में ब्लैक बॉक्स?
+- **68.73M model:** कार में ब्लैक बक्सा?
+- **23.36M model:** काले बॉक्स में एक काला बॉक्स?
 
-**English:** A black box in your car?  
-**Reference:** आपकी कार में ब्लैक बॉक्स?  
-**68.73M:** कार में ब्लैक बक्सा?  
-**23.36M:** काले बॉक्स में एक काला बॉक्स?
+**Analysis:** The larger model preserves the broad idea of a black box in a car, although it drops “your” and renders the phrase less naturally. The smaller model repeats the concept of “black box” and changes the sentence structure, showing a failure to preserve the source meaning precisely.
 
-**English:** The tea party is aghast.  
-**Reference:** चाय पार्टी भौचक्की है।  
-**68.73M:** चाय पार्टी है।  
-**23.36M:** चाय पार्टी एक चाय है।
+### Example 2 — Idiom and implied reaction
 
-## Results and limitations
+**English source:** `The tea party is aghast.`
 
-The 68.73M model reached a best validation loss 0.0600 lower and a reported BLEU 0.96 points higher than the 23.36M model. This was not a parameter-only controlled experiment because batch sizes and completed epochs differed. Both models produce grammatical and semantic errors and are not production-ready translators. BLEU was calculated on 2,394 filtered test examples.
+- **Reference:** चाय पार्टी भौचक्की है।
+- **68.73M model:** चाय पार्टी है।
+- **23.36M model:** चाय पार्टी एक चाय है।
 
-A few development notes contain different training-set counts across pipeline stages; verify the final preprocessing output before claiming a single filtered training count. This project is presented as a from-scratch Transformer learning project, emphasizing implementation, experimentation, and honest evaluation.
+**Analysis:** Both outputs fail to convey “aghast,” the key word carrying the sentence's meaning. The larger model produces a partial sentence; the smaller model misinterprets the phrase and produces an incorrect statement. This is a clear example of why decreasing loss alone does not guarantee reliable semantic translation.
+
+### Example 3 — Longer sentence and meaning preservation
+
+**English source:** `This really is a must for our nation.`
+
+- **Reference:** यह हमारे देश के लिए वास्तव में अनिवार्य वस्तु है।
+- **68.73M model:** यह वास्तव में हमारे देश के लिए एक राष्ट्र होना चाहिए।
+- **23.36M model:** यह वास्तव में हमारे राष्ट्र के लिए आवश्यक है।
+
+**Analysis:** The 23.36M model gives a more coherent rendering of the main idea, although it is not identical to the reference. The larger model mistranslates the construction “a must for our nation” as something like “should be a nation,” changing the meaning despite its better aggregate BLEU score. This illustrates that a single aggregate metric does not guarantee every sentence will improve with model size.
+
+### Example 4 — Long sentence with complex syntax
+
+**English source:** `There is going to be a change in how we pay these taxes.`
+
+- **Reference:** हमारे द्वारा कर भुगतान किए जाने के तरीके में परिवर्तन होने जा रहा है।
+- **68.73M model:** इन करों में कैसे बदलाव करने के लिए जा रहा है।
+- **23.36M model:** हम इन करों में एक परिवर्तन होने जा रहे हैं।
+
+**Analysis:** Both outputs have grammatical and semantic problems. The larger model retains words related to taxes and change but loses the intended relationship between the method of paying taxes and the expected change. The smaller model produces an unnatural construction and does not express the source sentence correctly. Longer syntactic dependencies remain difficult for both models.
+
+### What these examples suggest
+
+The larger model performs better on corpus BLEU and validation loss overall, but the qualitative examples show that both models can omit important information, misinterpret expressions, or produce ungrammatical Hindi. The outputs are useful diagnostic evidence, not proof of production-level translation quality.
+
+## 8. Limitations
+
+1. **Low translation quality:** corpus BLEU values of 6.78 and 7.74 indicate that these models remain far from reliable general-purpose translators.
+2. **Limited compute budget:** training was conducted on a single Tesla T4-class GPU, constraining batch size, training duration, and the scale of experiments.
+3. **Sequence-length filtering:** a 160-token limit reduces compute cost but excludes or truncates some long examples and may disproportionately affect long Hindi translations.
+4. **Training not fully matched:** the two model runs differ in batch size and completed epochs, so the result does not isolate parameter count as the only variable.
+5. **Evaluation coverage:** the final test loader contains 2,394 examples after filtering, not all 2,507 reported raw test examples.
+6. **Metric limitations:** BLEU measures n-gram overlap and cannot fully capture meaning, fluency, or all valid alternative translations.
+7. **Domain and data limitations:** the corpus combines data from varied sources, and the model may not generalize well to domains or sentence styles that are underrepresented in training.
+8. **No pretrained knowledge:** both models were trained from random initialization; they do not benefit from a pretrained language model or a pretrained translation system.
+
+## 9. Lessons learned
+
+- A functioning Transformer requires more than the attention equations: correct target shifting, padding masks, causal masks, cross-attention masks, and decoding behavior are all important.
+- Validation loss and BLEU provide different views of performance; neither replaces qualitative inspection.
+- More parameters can improve aggregate metrics without guaranteeing better output for every sentence.
+- Sequence-length limits should be selected from token-length statistics and available compute, with the resulting coverage trade-off documented.
+- Optimized kernels can improve efficiency, but a transparent baseline is valuable when the goal is to understand and validate the implementation.
+- Reproducible reporting requires distinguishing raw dataset sizes from filtered loader sizes and clearly stating when experiments differ in more than one variable.
+
+## 10. References
+
+1. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). **Attention Is All You Need.** *Advances in Neural Information Processing Systems 30 (NeurIPS 2017).* [arXiv:1706.03762](https://arxiv.org/abs/1706.03762).
+2. Kunchukuttan, A., Mehta, P., & Bhattacharyya, P. (2018). **The IIT Bombay English-Hindi Parallel Corpus.** *Proceedings of the Eleventh International Conference on Language Resources and Evaluation (LREC 2018).* [ACL Anthology](https://aclanthology.org/L18-1548/).
+3. Dataset repository: [cfilt/iitb-english-hindi on Hugging Face](https://huggingface.co/datasets/cfilt/iitb-english-hindi).
+
+## 11. Reproducibility note
+
+This README reports the configurations and metrics recorded during the experiments. Before treating the project as a fully reproducible release, include the training and inference scripts, tokenizer files/configuration, dependency versions, and exact preprocessing commands in the repository. Verify the final retained training-set count from the actual data pipeline before publishing it; intermediate notes contained different counts from different processing stages.
