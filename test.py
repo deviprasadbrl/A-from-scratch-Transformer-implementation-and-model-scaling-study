@@ -13,7 +13,7 @@ from sacrebleu.metrics import BLEU
 from paths import BEST_CHECKPOINT_PATH
 
 
-config=CONFIG_23M()
+config=CONFIG_23M
 
 BEAM_SIZE=4
 LENGTH_PENALTY=0.7
