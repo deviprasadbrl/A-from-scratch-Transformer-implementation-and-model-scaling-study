@@ -1,10 +1,10 @@
 from torch.utils.data import DataLoader
 from dataset_processing.data_pipeline import TranslationDataset,collate_fn,filter_by_length,tokenize_sentence
 from datasets import load_from_disk
-from config import Config
+from config import Config_23M
 from paths import DATASET_PATH
 
-BATCH_SIZE=Config.batch_size
+BATCH_SIZE=Config_23M.batch_size
 
 dataset=load_from_disk(DATASET_PATH)
 
