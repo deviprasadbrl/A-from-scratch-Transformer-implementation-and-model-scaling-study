@@ -1,6 +1,6 @@
 # English–Hindi Neural Machine Translation with a Transformer
 
-An educational neural machine translation project built in PyTorch to study the Transformer architecture end to end. Two encoder–decoder models were trained from random initialization on the IIT Bombay English–Hindi parallel corpus. The project focuses on implementing the core architecture, building a translation data pipeline, training under limited GPU resources, and evaluating autoregressive generation.
+An educational neural machine translation project built in PyTorch to study the Transformer architecture end to end. Two encoder–decoder models were trained from random initialization on the IIT Bombay English–Hindi parallel corpus. The project focuses on implementing the core architecture, building a translation data pipeline, training under limited GPU resources.
 
 > **Project status:** Experimental learning project. The models demonstrate a working training and inference pipeline, but their translation quality is not sufficient for real-world use.
 
