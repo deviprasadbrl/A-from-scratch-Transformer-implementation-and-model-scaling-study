@@ -1,0 +1,491 @@
+======================================================================
+Traning Data Total Tokens
+======================================================================
+
+Training examples: 1652729
+English tokens: 28582929
+Hindi tokens: 30553467
+Total tokens: 59136396
+
+======================================================================
+23.36M Model:
+======================================================================
+
+Parameters:
+
+Encoder: 8,835,072
+Decoder: 14,529,152
+Total:   23,364,224
+Total:   23.36M
+
+Config:
+    vocab_size: int = VOCAB_SIZE
+    d_model: int = 256
+    num_heads: int = 8
+    encoder_blocks: int =6
+    decoder_blocks: int=6
+    ff_dim: int = 1024
+    max_length: int =160
+    dropout_rate: float = 0.1
+    lr: float = 3e-4
+    total_epochs: int = 40
+    max_norm: float = 1.0
+    batch_size: int =128
+    gradient_acculumation:int=2
+    weight_decay:float=0.01
+
+
+
+Training and Validation Loss:
+
+Epoch: 0 Train Loss: 2.5124
+Epoch: 0 Val Loss: 2.2749
+
+Epoch: 1 Train Loss: 1.8697
+Epoch: 1 Val Loss: 2.0270
+
+Epoch: 2 Train Loss: 1.6695
+Epoch: 2 Val Loss: 1.9230
+
+Epoch: 3 Train Loss: 1.5464
+Epoch: 3 Val Loss: 1.8352
+
+Epoch: 4 Train Loss: 1.4603
+Epoch: 4 Val Loss: 1.7799
+
+Epoch: 5 Train Loss: 1.3948
+Epoch: 5 Val Loss: 1.7258
+
+Epoch: 6 Train Loss: 1.3432
+Epoch: 6 Val Loss: 1.6964
+
+Epoch: 7 Train Loss: 1.3005
+Epoch: 7 Val Loss: 1.6747
+
+Epoch: 8 Train Loss: 1.2643
+Epoch: 8 Val Loss: 1.6437
+
+Epoch: 9 Train Loss: 1.2328
+Epoch: 9 Val Loss: 1.6256
+
+Epoch: 10 Train Loss: 1.2053
+Epoch: 10 Val Loss: 1.5899
+
+Epoch: 11 Train Loss: 1.1807
+Epoch: 11 Val Loss: 1.5741
+
+Epoch: 12 Train Loss: 1.1585
+Epoch: 12 Val Loss: 1.5604
+
+Epoch: 13 Train Loss: 1.1383
+Epoch: 13 Val Loss: 1.5501
+
+Epoch: 14 Train Loss: 1.1201
+Epoch: 14 Val Loss: 1.5341
+
+Epoch: 15 Train Loss: 1.1035
+Epoch: 15 Val Loss: 1.5189
+
+Epoch: 16 Train Loss: 1.0883
+Epoch: 16 Val Loss: 1.5185
+
+Epoch: 17 Train Loss: 1.0744
+Epoch: 17 Val Loss: 1.5141
+
+Epoch: 18 Train Loss: 1.0614
+Epoch: 18 Val Loss: 1.5006
+
+Epoch: 19 Train Loss: 1.0494
+Epoch: 19 Val Loss: 1.4851
+
+Epoch: 20 Train Loss: 1.0384
+Epoch: 20 Val Loss: 1.4892
+The model didn't beat the best val (1/2)
+
+Epoch: 21 Train Loss: 1.0280
+Epoch: 21 Val Loss: 1.4755
+
+Epoch: 22 Train Loss: 1.0183
+Epoch: 22 Val Loss: 1.4724
+
+Epoch: 23 Train Loss: 1.0096
+Epoch: 23 Val Loss: 1.4637
+
+Epoch: 24 Train Loss: 1.0013
+Epoch: 24 Val Loss: 1.4603
+
+Epoch: 25 Train Loss: 0.9938
+Epoch: 25 Val Loss: 1.4501
+
+Epoch: 26 Train Loss: 0.9866
+Epoch: 26 Val Loss: 1.4599
+The model didn't beat the best val (1/2)
+
+Epoch: 27 Train Loss: 0.9803
+Epoch: 27 Val Loss: 1.4464
+
+Epoch: 28 Train Loss: 0.9743
+Epoch: 28 Val Loss: 1.4472
+The model didn't beat the best val (1/2)
+
+Epoch: 29 Train Loss: 0.9689
+Epoch: 29 Val Loss: 1.4495
+The model didn't beat the best val (2/2)
+
+Test examples and bleu(held on test_data):
+
+======================================================================
+Sample 1
+
+English:
+A black box in your car?
+
+Reference Hindi:
+आपकी कार में ब्लैक बॉक्स?
+
+Beam Search (beam=4):
+काले बॉक्स में एक काला बॉक्स? 
+======================================================================
+
+======================================================================
+Sample 2
+
+English:
+As America's road planners struggle to find the cash to mend a crumbling highway system, many are beginning to see a solution in a little black box that fits neatly by the dashboard of your car.
+
+Reference Hindi:
+जबकि अमेरिका के सड़क योजनाकार, ध्वस्त होते हुए हाईवे सिस्टम को सुधारने के लिए धन की कमी से जूझ रहे हैं, वहीं बहुत-से लोग इसका समाधान छोटे से ब्लैक बॉक्स में देख रहे हैं, जो आपकी कार के डैशबोर्ड पर सफ़ाई से फिट हो जाता है।
+
+Beam Search (beam=4):
+अमेरिका की सड़क संघर्ष योजना के रूप में मेरे लिए एक उच्च प्रणाली को खोजने की योजना बनाने के लिए बहुत सारी प्रणाली मिली है, जिससे कि आपके नाश्रय के निर्माण के द्वारा कालेबोर्ड द्वारा किया जा सके।
+======================================================================
+
+======================================================================
+Sample 3
+
+English:
+The usually dull arena of highway planning has suddenly spawned intense debate and colorful alliances.
+
+Reference Hindi:
+आम तौर पर हाईवे नियोजन जैसा उबाऊ काम भी अचानक गहन बहस तथा जीवंत गठबंधनों का मुद्दा बन गया है।
+
+Beam Search (beam=4):
+सामान्यतया सामान्यतया रंगीन योजना में अचानक वाद-विवाद हो चुकी है और सभी रंगीन रंगीन होती है। 
+======================================================================
+
+======================================================================
+Sample 4
+
+English:
+The tea party is aghast.
+
+Reference Hindi:
+चाय पार्टी भौचक्की है।
+
+Beam Search (beam=4):
+चाय पार्टी एक चाय है। 
+======================================================================
+
+======================================================================
+Sample 5
+
+English:
+The American Civil Liberties Union is deeply concerned, too, raising a variety of privacy issues.
+
+Reference Hindi:
+अमेरिकी नागरिक स्वतंत्रता संघ भी विभिन्न प्रकार के गोपनीयता मुद्दे उठाते हुए बहुत चिंतित है।
+
+Beam Search (beam=4):
+अमेरिकी सिविल लिबर्टी सिविल संबंधित केंद्रों का भी गहरा संबंध है। 
+======================================================================
+
+======================================================================
+Sample 6
+
+English:
+And while Congress can't agree on whether to proceed, several states are not waiting.
+
+Reference Hindi:
+जबकि कांग्रेस इस बात पर सहमत नहीं हो सकी कि आगे की कार्यवाही करनी है या नहीं, बहुत से राज्य प्रतीक्षा नहीं कर रहे।
+
+Beam Search (beam=4):
+और जब कांग्रेस को यह स्वीकार कर सकता है कि क्या अनेक राज्यों की प्रतीक्षा कर रहे हैं। 
+======================================================================
+
+======================================================================
+Sample 7
+
+English:
+They are exploring how, over the next decade, they can move to a system in which drivers pay per mile of road they roll over.
+
+Reference Hindi:
+वे यह खोज कर रहे हैं कि अगले दशक में वे किस तरह से ऐसी प्रणाली में जा सकते हैं, जिसमें चालक सड़क पर तय किए गए प्रत्येक मील के लिए भुगतान करे।
+
+Beam Search (beam=4):
+वे स्पष्ट हैं कि अगले दशक के दौरान, अगले दशक के दौरान वे सड़क की सड़क पर पहुंच सकते हैं जिससे वे सड़क पर सड़क के मार्ग का भुगतान कर सकते हैं। 
+======================================================================
+
+======================================================================
+Sample 8
+
+English:
+Thousands of motorists have already taken the black boxes, some of which have GPS monitoring, for a test drive.
+
+Reference Hindi:
+हजारों मोटर-चालकों ने टेस्ट ड्राइव के लिए पहले ही ब्लैक बॉक्स ले लिया है, जिसमें से कुछ में जी.पी.एस. मॉनीटरिंग है।
+
+Beam Search (beam=4):
+हजारों मोटर काले बॉक्स के काले बॉक्स लिये हैं, जिनमें से कुछ जीपीएस के लिए एक निगरानी रखी है। 
+======================================================================
+
+======================================================================
+Sample 9
+
+English:
+This really is a must for our nation.
+
+Reference Hindi:
+यह हमारे देश के लिए वास्तव में अनिवार्य वस्तु है।
+
+Beam Search (beam=4):
+यह वास्तव में हमारे राष्ट्र के लिए आवश्यक है। 
+======================================================================
+
+======================================================================
+Sample 10
+
+English:
+There is going to be a change in how we pay these taxes.
+
+Reference Hindi:
+हमारे द्वारा कर भुगतान किए जाने के तरीके में परिवर्तन होने जा रहा है।
+
+Beam Search (beam=4):
+हम इन करों में एक परिवर्तन होने जा रहे हैं। 
+======================================================================
+Processed 10/19 batches
+
+Total evaluated samples: 2394
+
+
+======================================================================
+FINAL BEAM SEARCH TEST RESULTS
+======================================================================
+BLEU Score      : 0.0678
+BLEU Score x100 : 6.78
+Test Samples    : 2394
+Beam Size       : 4
+Length Penalty  : 0.7
+Checkpoint Epoch: 27
+======================================================================
+
+
+======================================================================
+68.73M Model:
+======================================================================
+Parameters:
+
+Encoder: 27,107,328
+Decoder: 41,625,216
+Total:   68,732,544
+Total:   68.73M
+
+Config:
+    vocab_size: int = VOCAB_SIZE
+    d_model: int = 512
+    num_heads: int = 8
+    encoder_blocks: int = 6
+    decoder_blocks: int=6
+    ff_dim: int = 2048
+    max_length: int =160
+    dropout_rate: float = 0.1
+    lr: float = 3e-4
+    total_epochs: int = 40
+    max_norm: float = 1.0
+    batch_size: int = 64
+    gradient_acculumation:int=2
+    weight_decay:float=0.01
+
+
+Training and Validation Loss:
+
+Epoch: 0 Train Loss: 2.0342
+Epoch: 0 Val Loss: 1.9177
+Epoch: 1 Train Loss: 1.4363
+Epoch: 1 Val Loss: 1.7088
+Epoch: 2 Train Loss: 1.2384
+Epoch: 2 Val Loss: 1.6231
+Epoch: 3 Train Loss: 1.1150
+Epoch: 3 Val Loss: 1.5512
+Epoch: 4 Train Loss: 1.0295
+Epoch: 4 Val Loss: 1.4997
+Epoch: 5 Train Loss: 0.9672
+Epoch: 5 Val Loss: 1.4629
+Epoch: 6 Train Loss: 0.9194
+Epoch: 6 Val Loss: 1.4528
+Epoch: 7 Train Loss: 0.8796
+Epoch: 7 Val Loss: 1.4336
+Epoch: 8 Train Loss: 0.8458
+Epoch: 8 Val Loss: 1.4095
+Epoch: 9 Train Loss: 0.8159
+Epoch: 9 Val Loss: 1.4088
+Epoch: 10 Train Loss: 0.7886
+Epoch: 10 Val Loss: 1.4020
+Epoch: 11 Train Loss: 0.7639
+Epoch: 11 Val Loss: 1.3985
+Epoch: 12 Train Loss: 0.7409
+Epoch: 12 Val Loss: 1.3864
+Epoch: 13 Train Loss: 0.7197
+Epoch: 13 Val Loss: 1.3970
+The model didn't beat the best val (1/2)
+Epoch: 14 Train Loss: 0.6992
+Epoch: 14 Val Loss: 1.3958
+The model didn't beat the best val (2/2)
+
+Test examples and bleu score (held on test_data):
+======================================================================
+Sample 1
+
+English:
+A black box in your car?
+
+Reference Hindi:
+आपकी कार में ब्लैक बॉक्स?
+
+Beam Search (beam=4):
+कार में ब्लैक बक्सा? 
+======================================================================
+
+======================================================================
+Sample 2
+
+English:
+As America's road planners struggle to find the cash to mend a crumbling highway system, many are beginning to see a solution in a little black box that fits neatly by the dashboard of your car.
+
+Reference Hindi:
+जबकि अमेरिका के सड़क योजनाकार, ध्वस्त होते हुए हाईवे सिस्टम को सुधारने के लिए धन की कमी से जूझ रहे हैं, वहीं बहुत-से लोग इसका समाधान छोटे से ब्लैक बॉक्स में देख रहे हैं, जो आपकी कार के डैशबोर्ड पर सफ़ाई से फिट हो जाता है।
+
+Beam Search (beam=4):
+अमेरिका की सड़कों की योजना बनाने वाले संघर्ष की योजना मुझे एक प्रणाली के रूप में ढूंढने के लिए बहुत अधिक होती है, बहुत सारा समाधान आपके काले बॉक्स के डिब्बे द्वारा अपने काली गाड़ी में बाक्स को देखें।
+======================================================================
+
+======================================================================
+Sample 3
+
+English:
+The usually dull arena of highway planning has suddenly spawned intense debate and colorful alliances.
+
+Reference Hindi:
+आम तौर पर हाईवे नियोजन जैसा उबाऊ काम भी अचानक गहन बहस तथा जीवंत गठबंधनों का मुद्दा बन गया है।
+
+Beam Search (beam=4):
+सामान्यतया अचानक राजमार्ग की योजना अचानक रंगीन बहस होती है। 
+======================================================================
+
+======================================================================
+Sample 4
+
+English:
+The tea party is aghast.
+
+Reference Hindi:
+चाय पार्टी भौचक्की है।
+
+Beam Search (beam=4):
+चाय पार्टी है। 
+======================================================================
+
+======================================================================
+Sample 5
+
+English:
+The American Civil Liberties Union is deeply concerned, too, raising a variety of privacy issues.
+
+Reference Hindi:
+अमेरिकी नागरिक स्वतंत्रता संघ भी विभिन्न प्रकार के गोपनीयता मुद्दे उठाते हुए बहुत चिंतित है।
+
+Beam Search (beam=4):
+अमेरिकी सिविल लिबर्टीज यूनियन काफी गहराई से है, विभिन्न प्रकार के मुद्दों का निजीकरण करता है। 
+======================================================================
+
+======================================================================
+Sample 6
+
+English:
+And while Congress can't agree on whether to proceed, several states are not waiting.
+
+Reference Hindi:
+जबकि कांग्रेस इस बात पर सहमत नहीं हो सकी कि आगे की कार्यवाही करनी है या नहीं, बहुत से राज्य प्रतीक्षा नहीं कर रहे।
+
+Beam Search (beam=4):
+और जब कांग्रेस आगे बढ़ सकती है तो कांग्रेस कई राज्यों की प्रतीक्षा नहीं कर रहे हैं। 
+======================================================================
+
+======================================================================
+Sample 7
+
+English:
+They are exploring how, over the next decade, they can move to a system in which drivers pay per mile of road they roll over.
+
+Reference Hindi:
+वे यह खोज कर रहे हैं कि अगले दशक में वे किस तरह से ऐसी प्रणाली में जा सकते हैं, जिसमें चालक सड़क पर तय किए गए प्रत्येक मील के लिए भुगतान करे।
+
+Beam Search (beam=4):
+वे स्पष्ट हैं कि किस प्रकार अगले दशक में वे एक ऐसी प्रणाली चला सकते हैं जिससे वे सड़क की माल की रोल पर निर्भर करते हैं। 
+======================================================================
+
+======================================================================
+Sample 8
+
+English:
+Thousands of motorists have already taken the black boxes, some of which have GPS monitoring, for a test drive.
+
+Reference Hindi:
+हजारों मोटर-चालकों ने टेस्ट ड्राइव के लिए पहले ही ब्लैक बॉक्स ले लिया है, जिसमें से कुछ में जी.पी.एस. मॉनीटरिंग है।
+
+Beam Search (beam=4):
+हजारों मोटर वादियों ने पहले ही काले बक्सों को जीपीएस की कुछ निगरानी रखने वाली टेस्ट ड्राइविंग का परीक्षण किया है। 
+======================================================================
+
+======================================================================
+Sample 9
+
+English:
+This really is a must for our nation.
+
+Reference Hindi:
+यह हमारे देश के लिए वास्तव में अनिवार्य वस्तु है।
+
+Beam Search (beam=4):
+यह वास्तव में हमारे देश के लिए एक राष्ट्र होना चाहिए। 
+======================================================================
+
+======================================================================
+Sample 10
+
+English:
+There is going to be a change in how we pay these taxes.
+
+Reference Hindi:
+हमारे द्वारा कर भुगतान किए जाने के तरीके में परिवर्तन होने जा रहा है।
+
+Beam Search (beam=4):
+इन करों में कैसे बदलाव करने के लिए जा रहा है। 
+======================================================================
+Processed 10/38 batches
+Processed 20/38 batches
+Processed 30/38 batches
+
+Total evaluated samples: 2394
+
+
+======================================================================
+FINAL BEAM SEARCH TEST RESULTS
+======================================================================
+BLEU Score      : 0.0774
+BLEU Score x100 : 7.74
+Test Samples    : 2394
+Beam Size       : 4
+Length Penalty  : 0.7
+Checkpoint Epoch: 12
+======================================================================
