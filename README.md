@@ -217,8 +217,6 @@ The examples below compare the reference translation with each model's generated
 - **68.73M model:** कार में ब्लैक बक्सा?
 - **23.36M model:** काले बॉक्स में एक काला बॉक्स?
 
-**Analysis:** The larger model preserves the broad idea of a black box in a car, although it drops “your” and renders the phrase less naturally. The smaller model repeats the concept of “black box” and changes the sentence structure, showing a failure to preserve the source meaning precisely.
-
 ### Example 2 — Idiom and implied reaction
 
 **English source:** `The tea party is aghast.`
@@ -226,9 +224,7 @@ The examples below compare the reference translation with each model's generated
 - **Reference:** चाय पार्टी भौचक्की है।
 - **68.73M model:** चाय पार्टी है।
 - **23.36M model:** चाय पार्टी एक चाय है।
-
-**Analysis:** Both outputs fail to convey “aghast,” the key word carrying the sentence's meaning. The larger model produces a partial sentence; the smaller model misinterprets the phrase and produces an incorrect statement. This is a clear example of why decreasing loss alone does not guarantee reliable semantic translation.
-
+- 
 ### Example 3 — Longer sentence and meaning preservation
 
 **English source:** `This really is a must for our nation.`
@@ -237,8 +233,6 @@ The examples below compare the reference translation with each model's generated
 - **68.73M model:** यह वास्तव में हमारे देश के लिए एक राष्ट्र होना चाहिए।
 - **23.36M model:** यह वास्तव में हमारे राष्ट्र के लिए आवश्यक है।
 
-**Analysis:** The 23.36M model gives a more coherent rendering of the main idea, although it is not identical to the reference. The larger model mistranslates the construction “a must for our nation” as something like “should be a nation,” changing the meaning despite its better aggregate BLEU score. This illustrates that a single aggregate metric does not guarantee every sentence will improve with model size.
-
 ### Example 4 — Long sentence with complex syntax
 
 **English source:** `There is going to be a change in how we pay these taxes.`
@@ -246,8 +240,6 @@ The examples below compare the reference translation with each model's generated
 - **Reference:** हमारे द्वारा कर भुगतान किए जाने के तरीके में परिवर्तन होने जा रहा है।
 - **68.73M model:** इन करों में कैसे बदलाव करने के लिए जा रहा है।
 - **23.36M model:** हम इन करों में एक परिवर्तन होने जा रहे हैं।
-
-**Analysis:** Both outputs have grammatical and semantic problems. The larger model retains words related to taxes and change but loses the intended relationship between the method of paying taxes and the expected change. The smaller model produces an unnatural construction and does not express the source sentence correctly. Longer syntactic dependencies remain difficult for both models.
 
 ### What these examples suggest
 
