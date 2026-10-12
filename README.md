@@ -17,6 +17,7 @@ An educational neural machine translation project built in PyTorch to study the 
 | Maximum sequence length | 160 tokens, including special tokens |
 | Hardware | NVIDIA Tesla T4 GPU (~15 GiB VRAM) |
 | Model family | Encoder–decoder Transformer, trained from scratch |
+| Normalization | Pre-Layer Normalization (Pre-LN) |
 
 ## 2.Installation
 
@@ -140,19 +141,27 @@ A maximum length of 160 was a practical trade-off between coverage and compute c
 
 The final test loader retained **2,394 of 2,507** test pairs after filtering. The validation length report contains 520 examples before filtering. Dataset counts can differ between raw data, cleaned data, and the final loader; therefore, the exact retained training count should be taken from the final preprocessing run rather than inferred from the raw corpus count.
 
-## 4. Model architecture
+## 4. Model Architecture
 
-Both experiments use the original encoder–decoder Transformer design introduced in *Attention Is All You Need*.
+Both experiments use an encoder–decoder Transformer based on the architecture introduced in *Attention Is All You Need*.
 
-- **Encoder:** six layers of self-attention and feed-forward processing build contextual representations of the English source sentence.
-- **Decoder:** six layers use causal self-attention over previously generated Hindi tokens, then cross-attention over the encoder output.
-- **Multi-head attention:** allows attention to be computed across multiple learned representation subspaces.
-- **Position information:** positional encoding supplies token-order information because the model does not use recurrence.
-- **Feed-forward networks:** process each position's representation between attention sublayers.
-- **Residual connections, layer normalization, and dropout:** support optimization and regularization.
-- **Masks:** source/target padding masks prevent attention to padding positions; causal masking prevents the decoder from seeing future target tokens during training.
+- **Encoder:** Six layers of multi-head self-attention and feed-forward processing build contextual representations of the English source sentence.
+- **Decoder:** Six layers combine causal self-attention over previously generated Hindi tokens with cross-attention over the encoder output.
+- **Multi-head attention:** Enables the model to learn relationships between tokens across multiple representation subspaces.
+- **Positional encoding:** Provides token-order information because the Transformer does not use recurrent layers.
+- **Feed-forward networks:** Process each token representation between attention sublayers.
+- **Pre-Layer Normalization (Pre-LN):** Layer normalization is applied before the attention and feed-forward sublayers. This design allows normalized representations to enter each sublayer and helps maintain stable gradient flow through the deep network.
+- **Residual connections:** Preserve information from earlier representations and provide direct paths for gradient propagation.
+- **Dropout:** Provides regularization during training.
+- **Attention masks:** Padding masks prevent attention to padded positions, while causal masking prevents the decoder from attending to future target tokens during training.
 
-The core attention and Transformer components were implemented with standard PyTorch tensor operations. This was an implementation-focused project rather than a wrapper around a pretrained translation model.
+The core attention and Transformer components were implemented using standard PyTorch tensor operations. The project focuses on implementing and training the architecture from scratch rather than fine-tuning a pretrained translation model.
+
+### Pre-LN versus Post-LN
+
+In a Pre-LN Transformer, layer normalization is applied before each sublayer, such as self-attention or the feed-forward network. In a Post-LN design, normalization is applied after the sublayer output is combined with the residual connection.
+
+This project uses Pre-LN, which can improve optimization stability when training deeper Transformers from scratch.
 
 ## 5. Why FlashAttention was not used
 
