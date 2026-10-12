@@ -263,16 +263,12 @@ The larger model performs better on corpus BLEU and validation loss overall, but
 - More parameters can improve aggregate metrics without guaranteeing better output for every sentence.
 - Sequence-length limits should be selected from token-length statistics and available compute, with the resulting coverage trade-off documented.
 - Optimized kernels can improve efficiency, but a transparent baseline is valuable when the goal is to understand and validate the implementation.
-- Reproducible reporting requires distinguishing raw dataset sizes from filtered loader sizes and clearly stating when experiments differ in more than one variable.
+
 
 ## 11. References
 
 1. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). **Attention Is All You Need.** *Advances in Neural Information Processing Systems 30 (NeurIPS 2017).* [arXiv:1706.03762](https://arxiv.org/abs/1706.03762).
 2. Dataset repository: [cfilt/iitb-english-hindi on Hugging Face](https://huggingface.co/datasets/cfilt/iitb-english-hindi).
-
-## 12. Reproducibility note
-
-This README reports the configurations and metrics recorded during the experiments. Before treating the project as a fully reproducible release, include the training and inference scripts, tokenizer files/configuration, dependency versions, and exact preprocessing commands in the repository. Verify the final retained training-set count from the actual data pipeline before publishing it; intermediate notes contained different counts from different processing stages.
 
 ---
 
