@@ -100,7 +100,7 @@ The larger model achieved a best validation loss lower by **0.0600** and corpus 
 ### Training and validation loss graphs
 
 <p align="center">
-  <img src="assets/transformer_loss_comparison.png" width="500">
+  <img src="assets/transformer_loss_comparison.png" width="1000">
 </p>
 
 
